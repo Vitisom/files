@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -8,15 +7,15 @@ using System.Linq;
 using System.Net.Mail;
 using System.Web;
 using System.Net;
+using System.Windows.Forms;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Win32;
 
-namespace MultipleComands
+namespace SendEmail
 {
-    public class Mc
+    public class Email
     {
-        public static void emailsend(string txtfrom, string txtpassword, string txtto, string txttitle, string txtmessage)
+        public static void emailsend(string txtfrom, string txtpassword, string txtto, string txttitle, string txtmessage, string file)
         {
             try
             {
@@ -27,6 +26,13 @@ namespace MultipleComands
                 mail.Subject = txttitle;
                 mail.Body = txtmessage;
                 mail.IsBodyHtml = true;
+
+                if (file.Length > 0)
+                {
+                    System.Net.Mail.Attachment attachment;
+                    attachment = new System.Net.Mail.Attachment(file);
+                    mail.Attachments.Add(attachment);
+                }
 
                 smtp.Port = 587;
                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
@@ -61,49 +67,64 @@ namespace MultipleComands
 
         static void Main(string[] args)
         {
-            if (args.Length > 0)
-            {
-                
-
-                if (args[0].StartsWith("/"))
+                if (args.Length > 0)
                 {
-                    try
+                    if (args[0].StartsWith("/"))
                     {
-                        if (args[0].Contains("help"))
+                        try
                         {
-                            Console.WriteLine("──────────────────────────────────────────────────────────────────");
-                            Console.Write(" Creator: ");
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Vitisom#3726");
-                            Console.ResetColor();
-                            Console.WriteLine("\n /send [emailfrom] [password] [emailto] [subject message] [body message] Send Email Message");
-                            Console.WriteLine("──────────────────────────────────────────────────────────────────");
-                        }
+                            if (args[0].Contains("help"))
+                            {
+                                Console.WriteLine("──────────────────────────────────────────────────────────────────");
+                                Console.Write(" Creator: ");
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("Vitisom#3726");
+                                Console.ResetColor();
+                                Console.WriteLine("\n /send [emailfrom] [password] [emailto] [subject message] [body message] [filelocation]");
+                                Console.WriteLine(" no sending files just put [.] and send email without files");
+                                Console.WriteLine("──────────────────────────────────────────────────────────────────");
+                            }
 
-                        if (args[0].EndsWith("send"))
-                        {
-                            emailsend(args[1], args[2], args[3], args[4], args[5]);
+                            if (args[0].Contains("send"))
+                            {
+                                try
+                                {
+                                    if (args[6].Length > 1)
+                                    {
+                                        emailsend(args[1], args[2], args[3], args[4], args[5], args[6]);
+
+                                        return;
+                                    }
+
+                                    emailsend(args[1], args[2], args[3], args[4], args[5], "");
+
+                                }
+                                catch (Exception ex)
+                                {
+
+                                    Console.WriteLine("Error: " + ex);
+                                }
+                            }
+                            else
+                            {
+
+                            }
+
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            
+                            Console.WriteLine("Error: " + ex);
                         }
-                        
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Console.WriteLine("Error: " + ex);
+                        Console.WriteLine("\ntype with [/] to use the commands");
                     }
                 }
                 else
                 {
-                    Console.WriteLine("\ntype with [/] to use the commands");
+                    Console.WriteLine("\ntype /help to show all commands");
                 }
-            }
-            else
-            {
-                Console.WriteLine("\ntype /help to show all commands");
-            }
         }
     }
 }
