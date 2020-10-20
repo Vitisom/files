@@ -73,19 +73,21 @@ namespace SendEmail
                     {
                         try
                         {
-                            if (args[0].Contains("help"))
+                            if (args[0].Contains("h"))
                             {
                                 Console.WriteLine("──────────────────────────────────────────────────────────────────");
                                 Console.Write(" Creator: ");
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("Vitisom#3726");
                                 Console.ResetColor();
-                                Console.WriteLine("\n /send [emailfrom] [password] [emailto] [subject message] [body message] [filelocation]");
-                                Console.WriteLine(" no sending files just put [.] and send email without files");
+                                Console.WriteLine("\n /s [emailfrom] [password] [emailto] [subject message] [body message] [filelocation]");
+
+                                Console.WriteLine($"\n if you want to send an email text with spaces 'Hello World' ");
+                                Console.WriteLine(" to not sending files put this [.] final point");
                                 Console.WriteLine("──────────────────────────────────────────────────────────────────");
                             }
 
-                            if (args[0].Contains("send"))
+                            if (args[0].Contains("s"))
                             {
                                 try
                                 {
@@ -123,7 +125,7 @@ namespace SendEmail
                 }
                 else
                 {
-                    Console.WriteLine("\ntype /help to show all commands");
+                    Console.WriteLine("\ntype /h to show all commands");
                 }
         }
     }
