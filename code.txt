@@ -1,0 +1,109 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Net.Mail;
+using System.Web;
+using System.Net;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Win32;
+
+namespace MultipleComands
+{
+    public class Mc
+    {
+        public static void emailsend(string txtfrom, string txtpassword, string txtto, string txttitle, string txtmessage)
+        {
+            try
+            {
+                MailMessage mail = new MailMessage();
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com");
+                mail.From = new MailAddress(txtfrom);
+                mail.To.Add(txtto);
+                mail.Subject = txttitle;
+                mail.Body = txtmessage;
+                mail.IsBodyHtml = true;
+
+                smtp.Port = 587;
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential(txtfrom, txtpassword);
+                smtp.EnableSsl = true;
+                smtp.Send(mail);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($"\nEmail Successfully Sent From: ");
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write($"{txtfrom}");
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(" To ");
+
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write($"{txtto}");
+                Console.ResetColor();
+
+                Console.WriteLine(" ");
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"\n{ex.Message}");
+                Console.ResetColor();
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            if (args.Length > 0)
+            {
+                
+
+                if (args[0].StartsWith("/"))
+                {
+                    try
+                    {
+                        if (args[0].Contains("help"))
+                        {
+                            Console.WriteLine("──────────────────────────────────────────────────────────────────");
+                            Console.Write(" Creator: ");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Vitisom#3726");
+                            Console.ResetColor();
+                            Console.WriteLine("\n /send [emailfrom] [password] [emailto] [subject message] [body message] Send Email Message");
+                            Console.WriteLine("──────────────────────────────────────────────────────────────────");
+                        }
+
+                        if (args[0].EndsWith("send"))
+                        {
+                            emailsend(args[1], args[2], args[3], args[4], args[5]);
+                        }
+                        else
+                        {
+                            
+                        }
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Error: " + ex);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\ntype with [/] to use the commands");
+                }
+            }
+            else
+            {
+                Console.WriteLine("\ntype /help to show all commands");
+            }
+        }
+    }
+}
